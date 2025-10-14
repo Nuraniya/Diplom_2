@@ -39,7 +39,7 @@ class TestCreateOrder:
         assert response.status_code == 400
         response_data = response.json()
         assert response_data["success"] == False
-        assert "message" in response_data
+        assert response_data["message"] == "Ingredient ids must be provided"
 
     @allure.title("Ошибка при создании заказа с неверным хешем ингредиентов")
     def test_create_order_with_invalid_ingredient_hash_error(self, registered_user):

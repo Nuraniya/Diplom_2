@@ -35,4 +35,4 @@ class TestLoginUser:
         assert response.status_code == 401
         response_data = response.json()
         assert response_data["success"] == False
-        assert "message" in response_data
+        assert response_data["message"] == "email or password are incorrect"

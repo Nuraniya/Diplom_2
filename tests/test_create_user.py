@@ -20,12 +20,16 @@ class TestCreateUser:
     @allure.title("Ошибка при создании пользователя с существующим email")
     def test_create_existing_user_error(self, registered_user):
         with allure.step("Отправить запрос на создание пользователя с существующим email"):
-            response = requests.post(REGISTER_USER_URL, json=registered_user)
+            response = requests.post(REGISTER_USER_URL, json={
+                "email": registered_user["email"],
+                "password": registered_user["password"],
+                "name": registered_user["name"]
+            })
 
         assert response.status_code == 403
         response_data = response.json()
         assert response_data["success"] == False
-        assert "message" in response_data
+        assert response_data["message"] == "User already exists"
 
     @pytest.mark.parametrize("missing_field", ["email", "password", "name"])
     @allure.title("Ошибка при создании пользователя без обязательного поля")
@@ -39,4 +43,4 @@ class TestCreateUser:
         assert response.status_code == 403
         response_data = response.json()
         assert response_data["success"] == False
-        assert "message" in response_data
+        assert response_data["message"] == "Email, password and name are required fields"
